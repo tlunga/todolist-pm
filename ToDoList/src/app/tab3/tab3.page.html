@@ -5,6 +5,15 @@
 </ion-header>
 
 <ion-content>
+  <!-- Dropdown pro řazení -->
+  <ion-item>
+    <ion-label>Řadit podle:</ion-label>
+    <ion-select [(ngModel)]="sortOrder" (ionChange)="sortCompletedTasks()">
+      <ion-select-option value="asc">Nejdříve dokončené</ion-select-option>
+      <ion-select-option value="desc">Nejnověji dokončené</ion-select-option>
+    </ion-select>
+  </ion-item>
+
   <ion-list>
     <ion-list-header>
       <ion-label><strong>Dokončené úkoly</strong></ion-label>
