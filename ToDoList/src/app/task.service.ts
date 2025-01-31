@@ -45,11 +45,14 @@ export class TaskService {
   }
   
 
-  undoTask(index: number) {
-    const task = this.completedTasks.splice(index, 1)[0];
-    delete task.completedAt; // Odebrání data dokončení
-    this.tasks.push(task);
-    this.saveTasks();
+  undoTask(taskId: string) {
+    const taskIndex = this.completedTasks.findIndex(task => task.id === taskId);
+    if (taskIndex !== -1) {
+      const task = this.completedTasks.splice(taskIndex, 1)[0];
+      delete task.completedAt; // Odebrání data dokončení
+      this.tasks.push(task);
+      this.saveTasks();
+    }
   }
 
   deleteTask(taskId: string) {
@@ -57,8 +60,8 @@ export class TaskService {
     this.saveTasks();
   }
 
-  deleteCompletedTask(index: number) {
-    this.completedTasks.splice(index, 1);
+  deleteCompletedTask(taskId: string) {
+    this.completedTasks = this.completedTasks.filter(task => task.id !== taskId);
     this.saveTasks();
   }
 

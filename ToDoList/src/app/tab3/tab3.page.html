@@ -5,7 +5,29 @@
 </ion-header>
 
 <ion-content>
-  <!-- Dropdown pro řazení -->
+  <!-- Filtrace podle měsíce dokončení -->
+  <ion-item>
+    <ion-label>Filtrovat podle měsíce dokončení:</ion-label>
+    <ion-select [(ngModel)]="selectedMonth" (ionChange)="filterCompletedTasks()">
+      <ion-select-option value="all">Všechny měsíce</ion-select-option>
+      <ion-select-option *ngFor="let month of availableMonths" [value]="month.value">
+        {{ month.label }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Filtrace podle priority -->
+  <ion-item>
+    <ion-label>Filtrovat podle priority:</ion-label>
+    <ion-select [(ngModel)]="selectedPriority" (ionChange)="filterCompletedTasks()">
+      <ion-select-option value="all">Všechny priority</ion-select-option>
+      <ion-select-option value="!">Nízká (!)</ion-select-option>
+      <ion-select-option value="!!">Střední (!!)</ion-select-option>
+      <ion-select-option value="!!!">Vysoká (!!!)</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Řazení podle data dokončení -->
   <ion-item>
     <ion-label>Řadit podle:</ion-label>
     <ion-select [(ngModel)]="sortOrder" (ionChange)="sortCompletedTasks()">
@@ -14,20 +36,21 @@
     </ion-select>
   </ion-item>
 
+  <!-- Seznam dokončených úkolů -->
   <ion-list>
     <ion-list-header>
       <ion-label><strong>Dokončené úkoly</strong></ion-label>
     </ion-list-header>
 
-    <ion-item *ngFor="let task of completedTasks; let i = index">
+    <ion-item *ngFor="let task of filteredCompletedTasks">
       <ion-label>
         <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
         <p>{{ task.description }}</p>
         <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
         <p><strong>Date Completed:</strong> {{ task.completedAt | date:'medium' }}</p>
       </ion-label>
-      <ion-button color="warning" (click)="undoTask(i)">Odznačit</ion-button>
-      <ion-button color="danger" (click)="deleteCompletedTask(i)">Smazat</ion-button>
+      <ion-button color="warning" (click)="undoTask(task.id)">Odznačit</ion-button>
+      <ion-button color="danger" (click)="deleteCompletedTask(task.id)">Smazat</ion-button>
     </ion-item>
   </ion-list>
 </ion-content>
