@@ -4,7 +4,8 @@ export interface Task {
   text: string;
   description: string;
   priority: string;
-  created: string; // Datum ve formátu ISO
+  created: string; // Datum vytvoření
+  completedAt?: string; // Datum dokončení (volitelně)
 }
 
 @Injectable({
@@ -22,7 +23,7 @@ export class TaskService {
     const newTask: Task = {
       text: taskText,
       description: taskDescription || 'Bez popisu',
-      priority: taskPriority || '!', // Výchozí priorita "!"
+      priority: taskPriority || '!',
       created: this.generateRandomDate().toISOString()
     };
     this.tasks.push(newTask);
@@ -31,12 +32,14 @@ export class TaskService {
 
   completeTask(index: number) {
     const completedTask = this.tasks.splice(index, 1)[0];
+    completedTask.completedAt = new Date().toISOString(); // Nastavení aktuálního data a času
     this.completedTasks.push(completedTask);
     this.saveTasks();
   }
 
   undoTask(index: number) {
     const task = this.completedTasks.splice(index, 1)[0];
+    delete task.completedAt; // Odebrání data dokončení
     this.tasks.push(task);
     this.saveTasks();
   }
