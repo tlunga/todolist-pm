@@ -11,6 +11,7 @@ export class Tab2Page {
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
   showFavoritesOnly: boolean = false; // Nový filtr
+  expandedTaskId: string | null = null; // ID rozbaleného úkolu
 
   sortOrder: string = 'asc';
   selectedMonth: string = 'all';
@@ -31,6 +32,10 @@ export class Tab2Page {
     this.taskService.completeTask(taskId);
     this.tasks = this.taskService.getTasks();
     this.filterTasks();
+  }
+
+  toggleTaskDetails(taskId: string) {
+    this.expandedTaskId = this.expandedTaskId === taskId ? null : taskId;
   }
   
   toggleFavorite(taskId: string) {

@@ -53,8 +53,6 @@
       <ion-item>
         <ion-label>
           <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
-          <p>{{ task.description }}</p>
-          <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
         </ion-label>
         <!-- Hvězdička pro označení oblíbeného -->
         <ion-icon [name]="task.isFavorite ? 'star' : 'star-outline'" 
@@ -62,6 +60,19 @@
                   color="warning"
                   (click)="toggleFavorite(task.id)">
         </ion-icon>
+
+        <ion-icon [name]="expandedTaskId === task.id ? 'chevron-up-outline' : 'chevron-down-outline'"
+                  slot="end"
+                  (click)="toggleTaskDetails(task.id)">
+        </ion-icon>
+      </ion-item>
+  
+      <!-- Detaily úkolu (zobrazí se pouze pokud je úkol rozbalen) -->
+      <ion-item *ngIf="expandedTaskId === task.id">
+        <ion-label>
+          <p>{{ task.description }}</p>
+          <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
+        </ion-label>
       </ion-item>
 
       <!-- Swipe doprava: Označit jako hotové -->

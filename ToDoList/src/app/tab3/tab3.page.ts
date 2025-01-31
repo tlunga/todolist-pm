@@ -10,6 +10,7 @@ import { TaskService, Task } from '../task.service';
 export class Tab3Page {
   completedTasks: Task[] = [];
   filteredCompletedTasks: Task[] = [];
+  expandedTaskId: string | null = null; // ID rozbaleného úkolu
 
   sortOrder: string = 'asc'; // Výchozí řazení
   selectedMonth: string = 'all'; // Výchozí měsíc (Všechny měsíce)
@@ -31,6 +32,10 @@ export class Tab3Page {
     this.completedTasks = this.taskService.getCompletedTasks();
     this.updateAvailableMonths();
     this.filterCompletedTasks();
+  }
+
+  toggleTaskDetails(taskId: string) {
+    this.expandedTaskId = this.expandedTaskId === taskId ? null : taskId;
   }
 
   deleteCompletedTask(taskId: string) {

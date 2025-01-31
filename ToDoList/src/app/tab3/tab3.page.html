@@ -46,6 +46,16 @@
       <ion-item>
         <ion-label>
           <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
+        </ion-label>
+        <ion-icon [name]="expandedTaskId === task.id ? 'chevron-up-outline' : 'chevron-down-outline'"
+                  slot="end"
+                  (click)="toggleTaskDetails(task.id)">
+        </ion-icon>
+      </ion-item>
+  
+      <!-- Detaily úkolu (zobrazí se pouze pokud je úkol rozbalen) -->
+      <ion-item *ngIf="expandedTaskId === task.id">
+        <ion-label>
           <p>{{ task.description }}</p>
           <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
           <p><strong>Date Completed:</strong> {{ task.completedAt | date:'medium' }}</p>
