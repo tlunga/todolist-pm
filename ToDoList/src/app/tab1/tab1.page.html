@@ -1,47 +1,14 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      To-Do List
-    </ion-title>
+    <ion-title>Přidat úkol</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">To-Do List</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <!-- Vstupní pole a tlačítko pro vytvoření úkolu -->
+<ion-content>
   <ion-list>
     <ion-item>
       <ion-input [(ngModel)]="taskText" placeholder="Napiš úkol..." clearInput></ion-input>
       <ion-button expand="full" (click)="addTask()">Vytvořit task</ion-button>
     </ion-item>
   </ion-list>
-
-  <!-- Sekce s nedokončenými úkoly -->
-  <ion-list>
-    <ion-list-header>
-      <ion-label><strong>To-Do</strong></ion-label>
-    </ion-list-header>
-
-    <ion-item *ngFor="let task of tasks; let i = index">
-      <ion-label>{{ task }}</ion-label>
-      <ion-button color="success" (click)="completeTask(i)">Hotovo</ion-button>
-    </ion-item>
-  </ion-list>
-
-  <!-- Sekce s dokončenými úkoly -->
-  <ion-list>
-    <ion-list-header>
-      <ion-label><strong>Dokončené úkoly</strong></ion-label>
-    </ion-list-header>
-
-    <ion-item *ngFor="let task of completedTasks">
-      <ion-label>{{ task }}</ion-label>
-    </ion-item>
-  </ion-list>
-
 </ion-content>

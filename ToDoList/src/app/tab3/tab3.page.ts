@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TaskService } from '../task.service';
 
 @Component({
   selector: 'app-tab3',
@@ -7,7 +8,16 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class Tab3Page {
+  completedTasks: string[] = [];
 
-  constructor() {}
+  constructor(private taskService: TaskService) {}
 
+  ionViewWillEnter() {
+    this.completedTasks = this.taskService.getCompletedTasks();
+  }
+
+  deleteCompletedTask(index: number) {
+    this.taskService.deleteCompletedTask(index);
+    this.completedTasks = this.taskService.getCompletedTasks();
+  }
 }

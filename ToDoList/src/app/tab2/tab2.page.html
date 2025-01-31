@@ -1,17 +1,18 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>To-Do List</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-list>
+    <ion-list-header>
+      <ion-label><strong>To-Do</strong></ion-label>
+    </ion-list-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+    <ion-item *ngFor="let task of tasks; let i = index">
+      <ion-label>{{ task }}</ion-label>
+      <ion-button color="success" (click)="completeTask(i)">Hotovo</ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>
