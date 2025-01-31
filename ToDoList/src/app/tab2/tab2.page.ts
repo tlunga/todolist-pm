@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TaskService } from '../task.service';
+import { TaskService, Task } from '../task.service';
 
 @Component({
   selector: 'app-tab2',
@@ -8,7 +8,7 @@ import { TaskService } from '../task.service';
   standalone: false,
 })
 export class Tab2Page {
-  tasks: string[] = [];
+  tasks: Task[] = [];
 
   constructor(private taskService: TaskService) {}
 
