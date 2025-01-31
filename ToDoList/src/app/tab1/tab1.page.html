@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Create New Task</ion-title>
+    <ion-title>Přidat úkol</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,7 +8,18 @@
   <ion-list>
     <ion-item>
       <ion-input [(ngModel)]="taskText" placeholder="Napiš úkol..." clearInput></ion-input>
-      <ion-button expand="full" (click)="addTask()">Create</ion-button>
     </ion-item>
+    <ion-item>
+      <ion-textarea [(ngModel)]="taskDescription" placeholder="Popis úkolu..."></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>Priorita</ion-label>
+      <ion-select [(ngModel)]="taskPriority">
+        <ion-select-option value="!">Nízká ( ! )</ion-select-option>
+        <ion-select-option value="!!">Střední ( !! )</ion-select-option>
+        <ion-select-option value="!!!">Vysoká ( !!! )</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-button expand="full" (click)="addTask()">Vytvořit task</ion-button>
   </ion-list>
 </ion-content>

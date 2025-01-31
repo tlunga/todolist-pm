@@ -12,8 +12,9 @@
 
     <ion-item *ngFor="let task of tasks; let i = index">
       <ion-label>
-        <h2>{{ task.text }}</h2>
-        <p>Date Created: {{ task.created | date:'medium' }}</p>
+        <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
+        <p>{{ task.description }}</p>
+        <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
       </ion-label>
       <ion-button color="success" (click)="completeTask(i)">Hotovo</ion-button>
       <ion-button color="danger" (click)="deleteTask(i)">Smazat</ion-button>

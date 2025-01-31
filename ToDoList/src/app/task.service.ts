@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 export interface Task {
   text: string;
-  created: string; // Datum uložené ve formátu ISO
+  description: string;
+  priority: string;
+  created: string; // Datum ve formátu ISO
 }
 
 @Injectable({
@@ -16,9 +18,11 @@ export class TaskService {
     this.loadTasks();
   }
 
-  addTask(taskText: string) {
+  addTask(taskText: string, taskDescription: string, taskPriority: string) {
     const newTask: Task = {
       text: taskText,
+      description: taskDescription || 'Bez popisu',
+      priority: taskPriority || '!', // Výchozí priorita "!"
       created: this.generateRandomDate().toISOString()
     };
     this.tasks.push(newTask);
@@ -71,7 +75,6 @@ export class TaskService {
     }
   }
 
-  // Funkce generující náhodný datum a čas v rámci posledního roku
   private generateRandomDate(): Date {
     const now = new Date();
     const oneYearAgo = new Date();
