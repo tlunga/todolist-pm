@@ -5,7 +5,29 @@
 </ion-header>
 
 <ion-content>
-  <!-- Dropdown pro řazení -->
+  <!-- Filtrace podle měsíce -->
+  <ion-item>
+    <ion-label>Filtrovat podle měsíce:</ion-label>
+    <ion-select [(ngModel)]="selectedMonth" (ionChange)="filterTasks()">
+      <ion-select-option value="all">Všechny měsíce</ion-select-option>
+      <ion-select-option *ngFor="let month of availableMonths" [value]="month.value">
+        {{ month.label }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Filtrace podle priority -->
+  <ion-item>
+    <ion-label>Filtrovat podle priority:</ion-label>
+    <ion-select [(ngModel)]="selectedPriority" (ionChange)="filterTasks()">
+      <ion-select-option value="all">Všechny priority</ion-select-option>
+      <ion-select-option value="!">Nízká (!)</ion-select-option>
+      <ion-select-option value="!!">Střední (!!)</ion-select-option>
+      <ion-select-option value="!!!">Vysoká (!!!)</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Řazení podle data -->
   <ion-item>
     <ion-label>Řadit podle:</ion-label>
     <ion-select [(ngModel)]="sortOrder" (ionChange)="sortTasks()">
@@ -14,19 +36,20 @@
     </ion-select>
   </ion-item>
 
+  <!-- Seznam úkolů -->
   <ion-list>
     <ion-list-header>
       <ion-label><strong>To-Do</strong></ion-label>
     </ion-list-header>
 
-    <ion-item *ngFor="let task of tasks; let i = index">
+    <ion-item *ngFor="let task of filteredTasks">
       <ion-label>
         <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
         <p>{{ task.description }}</p>
         <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
       </ion-label>
-      <ion-button color="success" (click)="completeTask(i)">Hotovo</ion-button>
-      <ion-button color="danger" (click)="deleteTask(i)">Smazat</ion-button>
-    </ion-item>
+      <ion-button color="success" (click)="completeTask(task.id)">Hotovo</ion-button>
+      <ion-button color="danger" (click)="deleteTask(task.id)">Smazat</ion-button>
+    </ion-item> 
   </ion-list>
 </ion-content>

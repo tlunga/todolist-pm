@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 
 export interface Task {
-  text: string;
-  description: string;
-  priority: string;
-  created: string; // Datum vytvoření
-  completedAt?: string; // Datum dokončení (volitelně)
-}
+    id: string;  // Unikátní ID
+    text: string;
+    description: string;
+    priority: string;
+    created: string;
+    completedAt?: string;
+  }
+  
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +23,7 @@ export class TaskService {
 
   addTask(taskText: string, taskDescription: string, taskPriority: string) {
     const newTask: Task = {
+      id: crypto.randomUUID(), // Unikátní ID
       text: taskText,
       description: taskDescription || 'Bez popisu',
       priority: taskPriority || '!',
@@ -29,13 +32,18 @@ export class TaskService {
     this.tasks.push(newTask);
     this.saveTasks();
   }
+  
 
-  completeTask(index: number) {
-    const completedTask = this.tasks.splice(index, 1)[0];
-    completedTask.completedAt = new Date().toISOString(); // Nastavení aktuálního data a času
-    this.completedTasks.push(completedTask);
-    this.saveTasks();
+  completeTask(taskId: string) {
+    const taskIndex = this.tasks.findIndex(task => task.id === taskId);
+    if (taskIndex !== -1) {
+      const completedTask = this.tasks.splice(taskIndex, 1)[0];
+      completedTask.completedAt = new Date().toISOString(); // Nastavení aktuálního data a času
+      this.completedTasks.push(completedTask);
+      this.saveTasks();
+    }
   }
+  
 
   undoTask(index: number) {
     const task = this.completedTasks.splice(index, 1)[0];
@@ -44,8 +52,8 @@ export class TaskService {
     this.saveTasks();
   }
 
-  deleteTask(index: number) {
-    this.tasks.splice(index, 1);
+  deleteTask(taskId: string) {
+    this.tasks = this.tasks.filter(task => task.id !== taskId);
     this.saveTasks();
   }
 
