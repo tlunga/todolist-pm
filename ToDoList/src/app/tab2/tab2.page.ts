@@ -10,6 +10,7 @@ import { TaskService, Task } from '../task.service';
 export class Tab2Page {
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
+  showFavoritesOnly: boolean = false; // Nový filtr
 
   sortOrder: string = 'asc';
   selectedMonth: string = 'all';
@@ -32,6 +33,11 @@ export class Tab2Page {
     this.filterTasks();
   }
   
+  toggleFavorite(taskId: string) {
+    this.taskService.toggleFavorite(taskId);
+    this.tasks = this.taskService.getTasks();
+    this.filterTasks();
+  }
 
   deleteTask(taskId: string) {
     this.taskService.deleteTask(taskId);
@@ -61,10 +67,17 @@ export class Tab2Page {
       const monthMatch = this.selectedMonth === 'all' || taskMonth.toString().padStart(2, '0') === this.selectedMonth;
       const priorityMatch = this.selectedPriority === 'all' || task.priority === this.selectedPriority;
       const searchMatch = this.searchQuery.trim() === '' || task.text.toLowerCase().includes(this.searchQuery.toLowerCase());
-      return monthMatch && priorityMatch && searchMatch;
+      const favoriteMatch = !this.showFavoritesOnly || task.isFavorite;
+      
+      return monthMatch && priorityMatch && searchMatch && favoriteMatch;
     });
 
-    this.sortTasks();
+    // Řazení tak, aby oblíbené úkoly byly nahoře
+    this.filteredTasks.sort((a, b) => {
+      if (a.isFavorite && !b.isFavorite) return -1;
+      if (!a.isFavorite && b.isFavorite) return 1;
+      return 0;
+    });
   }
 
   sortTasks() {

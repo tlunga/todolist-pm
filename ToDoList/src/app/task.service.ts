@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 
 export interface Task {
-    id: string;  // Unikátní ID
-    text: string;
-    description: string;
-    priority: string;
-    created: string;
-    completedAt?: string;
-  }
+  id: string;
+  text: string;
+  description: string;
+  priority: string;
+  created: string;
+  completedAt?: string;
+  isFavorite?: boolean; // Nový atribut pro oblíbené úkoly
+}
   
 
 @Injectable({
@@ -21,11 +22,24 @@ export class TaskService {
     this.loadTasks();
   }
 
+  toggleFavorite(taskId: string) {
+    const task = this.tasks.find(t => t.id === taskId);
+    if (task) {
+      task.isFavorite = !task.isFavorite;
+      this.saveTasks();
+    }
+  }
+
+  private saveTasks() {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+    localStorage.setItem('completedTasks', JSON.stringify(this.completedTasks));
+  }
+
   addTask(taskText: string, taskDescription: string, taskPriority: string) {
     const newTask: Task = {
       id: crypto.randomUUID(), // Unikátní ID
       text: taskText,
-      description: taskDescription || 'Bez popisu',
+      description: taskDescription || ' ',
       priority: taskPriority || '!',
       created: this.generateRandomDate().toISOString()
     };
@@ -71,11 +85,6 @@ export class TaskService {
 
   getCompletedTasks(): Task[] {
     return this.completedTasks;
-  }
-
-  private saveTasks() {
-    localStorage.setItem('tasks', JSON.stringify(this.tasks));
-    localStorage.setItem('completedTasks', JSON.stringify(this.completedTasks));
   }
 
   private loadTasks() {

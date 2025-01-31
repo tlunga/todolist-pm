@@ -41,9 +41,14 @@
     </ion-select>
   </ion-item>
 
+  <!-- Filtrovat oblíbené -->
+  <ion-item>
+    <ion-label>Zobrazit pouze oblíbené:</ion-label>
+    <ion-toggle [(ngModel)]="showFavoritesOnly" (ionChange)="filterTasks()"></ion-toggle>
+  </ion-item>
+
   <!-- Seznam úkolů -->
-   <!-- Seznam úkolů se swipe funkcionalitou -->
-   <ion-list>
+  <ion-list>
     <ion-item-sliding *ngFor="let task of filteredTasks">
       <ion-item>
         <ion-label>
@@ -51,6 +56,12 @@
           <p>{{ task.description }}</p>
           <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
         </ion-label>
+        <!-- Hvězdička pro označení oblíbeného -->
+        <ion-icon [name]="task.isFavorite ? 'star' : 'star-outline'" 
+                  slot="end" 
+                  color="warning"
+                  (click)="toggleFavorite(task.id)">
+        </ion-icon>
       </ion-item>
 
       <!-- Swipe doprava: Označit jako hotové -->
