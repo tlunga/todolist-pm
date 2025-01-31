@@ -20,4 +20,9 @@ export class Tab2Page {
     this.taskService.completeTask(index);
     this.tasks = this.taskService.getTasks();
   }
+
+  deleteTask(index: number) {
+    this.taskService.deleteTask(index);
+    this.tasks = this.taskService.getTasks();
+  }
 }

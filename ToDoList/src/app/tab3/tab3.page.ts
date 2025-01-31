@@ -16,6 +16,11 @@ export class Tab3Page {
     this.completedTasks = this.taskService.getCompletedTasks();
   }
 
+  undoTask(index: number) {
+    this.taskService.undoTask(index);
+    this.completedTasks = this.taskService.getCompletedTasks();
+  }
+
   deleteCompletedTask(index: number) {
     this.taskService.deleteCompletedTask(index);
     this.completedTasks = this.taskService.getCompletedTasks();

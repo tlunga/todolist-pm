@@ -22,6 +22,17 @@ export class TaskService {
     this.saveTasks();
   }
 
+  undoTask(index: number) {
+    const task = this.completedTasks.splice(index, 1)[0];
+    this.tasks.push(task);
+    this.saveTasks();
+  }
+
+  deleteTask(index: number) {
+    this.tasks.splice(index, 1);
+    this.saveTasks();
+  }
+
   deleteCompletedTask(index: number) {
     this.completedTasks.splice(index, 1);
     this.saveTasks();
