@@ -5,6 +5,10 @@
 </ion-header>
 
 <ion-content>
+  <ion-item>
+    <ion-input [(ngModel)]="searchQuery" placeholder="Hledat úkol..." (ionInput)="filterCompletedTasks()"></ion-input>
+  </ion-item>  
+  
   <!-- Filtrace podle měsíce dokončení -->
   <ion-item>
     <ion-label>Filtrovat podle měsíce dokončení:</ion-label>
@@ -38,19 +42,29 @@
 
   <!-- Seznam dokončených úkolů -->
   <ion-list>
-    <ion-list-header>
-      <ion-label><strong>Dokončené úkoly</strong></ion-label>
-    </ion-list-header>
+    <ion-item-sliding *ngFor="let task of filteredCompletedTasks">
+      <ion-item>
+        <ion-label>
+          <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
+          <p>{{ task.description }}</p>
+          <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
+          <p><strong>Date Completed:</strong> {{ task.completedAt | date:'medium' }}</p>
+        </ion-label>
+      </ion-item>
 
-    <ion-item *ngFor="let task of filteredCompletedTasks">
-      <ion-label>
-        <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
-        <p>{{ task.description }}</p>
-        <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
-        <p><strong>Date Completed:</strong> {{ task.completedAt | date:'medium' }}</p>
-      </ion-label>
-      <ion-button color="warning" (click)="undoTask(task.id)">Odznačit</ion-button>
-      <ion-button color="danger" (click)="deleteCompletedTask(task.id)">Smazat</ion-button>
-    </ion-item>
+      <!-- Swipe doprava: Obnovit úkol -->
+      <ion-item-options side="start">
+        <ion-item-option color="warning" (click)="undoTask(task.id)">
+          <ion-icon name="arrow-undo-outline"></ion-icon> Obnovit
+        </ion-item-option>
+      </ion-item-options>
+
+      <!-- Swipe doleva: Smazat -->
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="deleteCompletedTask(task.id)">
+          <ion-icon name="trash-outline"></ion-icon> Smazat
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 </ion-content>

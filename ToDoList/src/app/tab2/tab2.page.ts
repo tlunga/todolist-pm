@@ -11,9 +11,10 @@ export class Tab2Page {
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
 
-  sortOrder: string = 'asc'; // Výchozí řazení
-  selectedMonth: string = 'all'; // Výchozí měsíc (Všechny měsíce)
-  selectedPriority: string = 'all'; // Výchozí priorita (Všechny priority)
+  sortOrder: string = 'asc';
+  selectedMonth: string = 'all';
+  selectedPriority: string = 'all';
+  searchQuery: string = '';
 
   availableMonths: { value: string, label: string }[] = [];
 
@@ -56,10 +57,11 @@ export class Tab2Page {
 
   filterTasks() {
     this.filteredTasks = this.tasks.filter(task => {
-      const taskMonth = new Date(task.created).getMonth() + 1; // Získání měsíce z data
+      const taskMonth = new Date(task.created).getMonth() + 1;
       const monthMatch = this.selectedMonth === 'all' || taskMonth.toString().padStart(2, '0') === this.selectedMonth;
       const priorityMatch = this.selectedPriority === 'all' || task.priority === this.selectedPriority;
-      return monthMatch && priorityMatch;
+      const searchMatch = this.searchQuery.trim() === '' || task.text.toLowerCase().includes(this.searchQuery.toLowerCase());
+      return monthMatch && priorityMatch && searchMatch;
     });
 
     this.sortTasks();
@@ -72,6 +74,7 @@ export class Tab2Page {
       return this.sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     });
   }
+  
 
   getMonthLabel(month: string): string {
     const months: { [key: string]: string } = {

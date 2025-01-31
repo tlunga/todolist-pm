@@ -14,6 +14,7 @@ export class Tab3Page {
   sortOrder: string = 'asc'; // Výchozí řazení
   selectedMonth: string = 'all'; // Výchozí měsíc (Všechny měsíce)
   selectedPriority: string = 'all'; // Výchozí priorita (Všechny priority)
+  searchQuery: string = '';
 
   availableMonths: { value: string, label: string }[] = [];
 
@@ -55,15 +56,17 @@ export class Tab3Page {
       }))
       .sort((a, b) => parseInt(a.value) - parseInt(b.value)); // Seřazení podle měsíce
   }
+  
 
   filterCompletedTasks() {
     this.filteredCompletedTasks = this.completedTasks.filter(task => {
       const taskMonth = task.completedAt ? new Date(task.completedAt).getMonth() + 1 : null;
       const monthMatch = this.selectedMonth === 'all' || (taskMonth && taskMonth.toString().padStart(2, '0') === this.selectedMonth);
       const priorityMatch = this.selectedPriority === 'all' || task.priority === this.selectedPriority;
-      return monthMatch && priorityMatch;
+      const searchMatch = this.searchQuery.trim() === '' || task.text.toLowerCase().includes(this.searchQuery.toLowerCase());
+      return monthMatch && priorityMatch && searchMatch;
     });
-
+  
     this.sortCompletedTasks();
   }
 
