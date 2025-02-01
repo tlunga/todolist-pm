@@ -1,0 +1,13 @@
+<ion-slides [options]="slideOpts">
+    <ion-slide *ngFor="let text of carouselTexts">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{ text.title }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          {{ text.content }}
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+  </ion-slides>
+  
