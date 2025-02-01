@@ -26,6 +26,12 @@
 
     <ion-item>
       <ion-label>Deadline:</ion-label>
+      <ion-button expand="full"  (click)="toggleDeadlinePicker()">
+        Vybrat datum
+      </ion-button>
+    </ion-item>
+    
+    <ion-item *ngIf="showDeadlinePicker">
       <ion-datetime [(ngModel)]="taskDueDate" display-format="DD.MM.YYYY"></ion-datetime>
     </ion-item>
 

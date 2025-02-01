@@ -21,6 +21,8 @@ export class Tab1Page implements OnInit, OnDestroy {
   dynamicText: string = ''; 
   private textSubscription!: Subscription;
 
+  showDeadlinePicker: boolean = false; // Stav pro zobrazení kalendáře
+
   constructor(
     private taskService: TaskService,
     private dynamicTextService: DynamicTextService
@@ -41,6 +43,10 @@ export class Tab1Page implements OnInit, OnDestroy {
     }
   }
 
+  toggleDeadlinePicker() {
+    this.showDeadlinePicker = !this.showDeadlinePicker;
+  }
+
   addTask() {
     if (this.taskText.trim()) {
       this.taskService.addTask(this.taskText.trim(), this.taskDescription.trim(), this.taskPriority, this.selectedCategory, this.taskDueDate);
@@ -49,6 +55,7 @@ export class Tab1Page implements OnInit, OnDestroy {
       this.taskPriority = '!';
       this.selectedCategory = '';
       this.taskDueDate = undefined;
+      this.showDeadlinePicker = false;
     }
   }
 
