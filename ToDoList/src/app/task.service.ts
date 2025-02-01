@@ -5,11 +5,11 @@ export interface Task {
   text: string;
   description: string;
   priority: string;
+  category?: string;
   created: string;
   completedAt?: string;
-  isFavorite?: boolean; // Nový atribut pro oblíbené úkoly
+  isFavorite?: boolean;
 }
-  
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +17,7 @@ export interface Task {
 export class TaskService {
   private tasks: Task[] = [];
   private completedTasks: Task[] = [];
+  private categories: string[] = [];
 
   constructor() {
     this.loadTasks();
@@ -33,37 +34,37 @@ export class TaskService {
   private saveTasks() {
     localStorage.setItem('tasks', JSON.stringify(this.tasks));
     localStorage.setItem('completedTasks', JSON.stringify(this.completedTasks));
+    localStorage.setItem('categories', JSON.stringify(this.categories));
   }
 
-  addTask(taskText: string, taskDescription: string, taskPriority: string) {
+  addTask(taskText: string, taskDescription: string, taskPriority: string, category?: string) {
     const newTask: Task = {
-      id: crypto.randomUUID(), // Unikátní ID
+      id: crypto.randomUUID(),
       text: taskText,
-      description: taskDescription || ' ',
+      description: taskDescription || '',
       priority: taskPriority || '!',
+      category: category || '',
       created: this.generateRandomDate().toISOString()
     };
     this.tasks.push(newTask);
     this.saveTasks();
   }
-  
 
   completeTask(taskId: string) {
     const taskIndex = this.tasks.findIndex(task => task.id === taskId);
     if (taskIndex !== -1) {
       const completedTask = this.tasks.splice(taskIndex, 1)[0];
-      completedTask.completedAt = new Date().toISOString(); // Nastavení aktuálního data a času
+      completedTask.completedAt = new Date().toISOString();
       this.completedTasks.push(completedTask);
       this.saveTasks();
     }
   }
-  
 
   undoTask(taskId: string) {
     const taskIndex = this.completedTasks.findIndex(task => task.id === taskId);
     if (taskIndex !== -1) {
       const task = this.completedTasks.splice(taskIndex, 1)[0];
-      delete task.completedAt; // Odebrání data dokončení
+      delete task.completedAt;
       this.tasks.push(task);
       this.saveTasks();
     }
@@ -87,21 +88,43 @@ export class TaskService {
     return this.completedTasks;
   }
 
+  getCategories(): string[] {
+    return this.categories;
+  }
+
+  addCategory(category: string) {
+    if (!this.categories.includes(category)) {
+      this.categories.push(category);
+      this.saveTasks();
+    }
+  }
+
+  deleteCategory(category: string) {
+    this.categories = this.categories.filter(cat => cat !== category);
+    this.tasks.forEach(task => {
+      if (task.category === category) {
+        task.category = '';
+      }
+    });
+    this.saveTasks();
+  }
+
   private loadTasks() {
     const storedTasks = localStorage.getItem('tasks');
     const storedCompletedTasks = localStorage.getItem('completedTasks');
-    if (storedTasks) {
-      this.tasks = JSON.parse(storedTasks);
-    }
-    if (storedCompletedTasks) {
-      this.completedTasks = JSON.parse(storedCompletedTasks);
-    }
+    const storedCategories = localStorage.getItem('categories');
+
+    this.tasks = storedTasks ? JSON.parse(storedTasks) : [];
+    this.completedTasks = storedCompletedTasks ? JSON.parse(storedCompletedTasks) : [];
+    this.categories = storedCategories ? JSON.parse(storedCategories) : [];
   }
 
   private generateRandomDate(): Date {
     const now = new Date();
     const oneYearAgo = new Date();
     oneYearAgo.setFullYear(now.getFullYear() - 1);
+    
+    // Náhodné číslo mezi datem před rokem a dnešním dnem
     const randomTime = oneYearAgo.getTime() + Math.random() * (now.getTime() - oneYearAgo.getTime());
     return new Date(randomTime);
   }

@@ -1,7 +1,6 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Přidat task</ion-title>
-
     <ion-buttons slot="end">
       <ion-img src="assets/todo-logo.png" class="header-img"></ion-img>
     </ion-buttons>
@@ -24,13 +23,31 @@
         <ion-select-option value="!!!">Vysoká ( !!! )</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-label>Kategorie</ion-label>
+      <ion-select [(ngModel)]="selectedCategory">
+        <ion-select-option *ngFor="let category of categories" [value]="category">{{ category }}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-input [(ngModel)]="newCategory" placeholder="Nová kategorie"></ion-input>
+      <ion-button (click)="addCategory()">Přidat kategorii</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Odstranit kategorii</ion-label>
+      <ion-select [(ngModel)]="categoryToDelete">
+        <ion-select-option *ngFor="let category of categories" [value]="category">{{ category }}</ion-select-option>
+      </ion-select>
+      <ion-button color="danger" (click)="deleteCategory()">Smazat</ion-button>
+    </ion-item>
+
     <ion-button expand="full" (click)="addTask()">Vytvořit task</ion-button>
 
     <ion-text color="primary">
       <p class="dynamic-text">{{ dynamicText }}</p>
     </ion-text>
-
-    <ion-img src="assets/motivational.png" class="dynamic-image"></ion-img>
 
   </ion-list>
 </ion-content>

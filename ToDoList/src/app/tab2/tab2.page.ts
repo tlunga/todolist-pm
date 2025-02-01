@@ -10,20 +10,23 @@ import { TaskService, Task } from '../task.service';
 export class Tab2Page {
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
-  showFavoritesOnly: boolean = false; // Nový filtr
-  expandedTaskId: string | null = null; // ID rozbaleného úkolu
+  showFavoritesOnly: boolean = false;
+  expandedTaskId: string | null = null;
 
   sortOrder: string = 'asc';
   selectedMonth: string = 'all';
   selectedPriority: string = 'all';
+  selectedCategory: string = 'all'; // Přidána filtrace podle kategorie
   searchQuery: string = '';
 
   availableMonths: { value: string, label: string }[] = [];
+  categories: string[] = []; // Seznam dostupných kategorií
 
   constructor(private taskService: TaskService) {}
 
   ionViewWillEnter() {
     this.tasks = this.taskService.getTasks();
+    this.categories = this.taskService.getCategories();
     this.updateAvailableMonths();
     this.filterTasks();
   }
@@ -49,7 +52,6 @@ export class Tab2Page {
     this.tasks = this.taskService.getTasks();
     this.filterTasks();
   }
-  
 
   updateAvailableMonths() {
     const uniqueMonths = new Set<string>();
@@ -63,7 +65,7 @@ export class Tab2Page {
         value: month,
         label: this.getMonthLabel(month)
       }))
-      .sort((a, b) => parseInt(a.value) - parseInt(b.value)); // Seřazení podle měsíce
+      .sort((a, b) => parseInt(a.value) - parseInt(b.value));
   }
 
   filterTasks() {
@@ -71,13 +73,13 @@ export class Tab2Page {
       const taskMonth = new Date(task.created).getMonth() + 1;
       const monthMatch = this.selectedMonth === 'all' || taskMonth.toString().padStart(2, '0') === this.selectedMonth;
       const priorityMatch = this.selectedPriority === 'all' || task.priority === this.selectedPriority;
+      const categoryMatch = this.selectedCategory === 'all' || task.category === this.selectedCategory;
       const searchMatch = this.searchQuery.trim() === '' || task.text.toLowerCase().includes(this.searchQuery.toLowerCase());
       const favoriteMatch = !this.showFavoritesOnly || task.isFavorite;
       
-      return monthMatch && priorityMatch && searchMatch && favoriteMatch;
+      return monthMatch && priorityMatch && categoryMatch && searchMatch && favoriteMatch;
     });
 
-    // Řazení tak, aby oblíbené úkoly byly nahoře
     this.filteredTasks.sort((a, b) => {
       if (a.isFavorite && !b.isFavorite) return -1;
       if (!a.isFavorite && b.isFavorite) return 1;
@@ -92,7 +94,6 @@ export class Tab2Page {
       return this.sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
     });
   }
-  
 
   getMonthLabel(month: string): string {
     const months: { [key: string]: string } = {
@@ -102,5 +103,4 @@ export class Tab2Page {
     };
     return months[month] || 'Neznámý';
   }
-  
 }

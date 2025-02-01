@@ -13,7 +13,11 @@ export class Tab1Page implements OnInit, OnDestroy {
   taskText: string = '';
   taskDescription: string = '';
   taskPriority: string = '!';
-  dynamicText: string = ''; // Dynamický text
+  selectedCategory: string = ''; // Vybraná kategorie
+  newCategory: string = ''; // Nová kategorie
+  categoryToDelete: string = ''; // Kategorie k odstranění
+  categories: string[] = []; // Seznam kategorií
+  dynamicText: string = ''; 
   private textSubscription!: Subscription;
 
   constructor(
@@ -22,6 +26,7 @@ export class Tab1Page implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.categories = this.taskService.getCategories();
     this.textSubscription = this.dynamicTextService.text$.subscribe(
       (text) => {
         this.dynamicText = text;
@@ -37,10 +42,27 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   addTask() {
     if (this.taskText.trim()) {
-      this.taskService.addTask(this.taskText.trim(), this.taskDescription.trim(), this.taskPriority);
+      this.taskService.addTask(this.taskText.trim(), this.taskDescription.trim(), this.taskPriority, this.selectedCategory);
       this.taskText = '';
       this.taskDescription = '';
-      this.taskPriority = '!'; // Reset na výchozí hodnotu
+      this.taskPriority = '!';
+      this.selectedCategory = '';
+    }
+  }
+
+  addCategory() {
+    if (this.newCategory.trim()) {
+      this.taskService.addCategory(this.newCategory.trim());
+      this.categories = this.taskService.getCategories();
+      this.newCategory = '';
+    }
+  }
+
+  deleteCategory() {
+    if (this.categoryToDelete) {
+      this.taskService.deleteCategory(this.categoryToDelete);
+      this.categories = this.taskService.getCategories();
+      this.categoryToDelete = '';
     }
   }
 }

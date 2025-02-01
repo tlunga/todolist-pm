@@ -36,6 +36,17 @@
     </ion-select>
   </ion-item>
 
+  <!-- Filtrace podle kategorie -->
+  <ion-item>
+    <ion-label>Filtrovat podle kategorie:</ion-label>
+    <ion-select [(ngModel)]="selectedCategory" (ionChange)="filterTasks()">
+      <ion-select-option value="all">Všechny kategorie</ion-select-option>
+      <ion-select-option *ngFor="let category of categories" [value]="category">
+        {{ category }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+
   <!-- Řazení -->
   <ion-item>
     <ion-label>Řadit podle:</ion-label>
@@ -57,6 +68,7 @@
       <ion-item>
         <ion-label>
           <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
+          <p *ngIf="task.category">{{ task.category }}</p>
         </ion-label>
         <!-- Hvězdička pro označení oblíbeného -->
         <ion-icon [name]="task.isFavorite ? 'star' : 'star-outline'" 

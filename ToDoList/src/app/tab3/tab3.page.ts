@@ -10,19 +10,22 @@ import { TaskService, Task } from '../task.service';
 export class Tab3Page {
   completedTasks: Task[] = [];
   filteredCompletedTasks: Task[] = [];
-  expandedTaskId: string | null = null; // ID rozbaleného úkolu
+  expandedTaskId: string | null = null; 
 
-  sortOrder: string = 'asc'; // Výchozí řazení
-  selectedMonth: string = 'all'; // Výchozí měsíc (Všechny měsíce)
-  selectedPriority: string = 'all'; // Výchozí priorita (Všechny priority)
+  sortOrder: string = 'asc';
+  selectedMonth: string = 'all';
+  selectedPriority: string = 'all';
+  selectedCategory: string = 'all'; // Přidáváme filtr kategorií
   searchQuery: string = '';
 
   availableMonths: { value: string, label: string }[] = [];
+  categories: string[] = []; // Seznam dostupných kategorií
 
   constructor(private taskService: TaskService) {}
 
   ionViewWillEnter() {
     this.completedTasks = this.taskService.getCompletedTasks();
+    this.categories = this.taskService.getCategories(); // Načítáme dostupné kategorie
     this.updateAvailableMonths();
     this.filterCompletedTasks();
   }
@@ -59,19 +62,20 @@ export class Tab3Page {
         value: month,
         label: this.getMonthLabel(month)
       }))
-      .sort((a, b) => parseInt(a.value) - parseInt(b.value)); // Seřazení podle měsíce
+      .sort((a, b) => parseInt(a.value) - parseInt(b.value));
   }
-  
 
   filterCompletedTasks() {
     this.filteredCompletedTasks = this.completedTasks.filter(task => {
       const taskMonth = task.completedAt ? new Date(task.completedAt).getMonth() + 1 : null;
       const monthMatch = this.selectedMonth === 'all' || (taskMonth && taskMonth.toString().padStart(2, '0') === this.selectedMonth);
       const priorityMatch = this.selectedPriority === 'all' || task.priority === this.selectedPriority;
+      const categoryMatch = this.selectedCategory === 'all' || task.category === this.selectedCategory;
       const searchMatch = this.searchQuery.trim() === '' || task.text.toLowerCase().includes(this.searchQuery.toLowerCase());
-      return monthMatch && priorityMatch && searchMatch;
+
+      return monthMatch && priorityMatch && categoryMatch && searchMatch;
     });
-  
+
     this.sortCompletedTasks();
   }
 

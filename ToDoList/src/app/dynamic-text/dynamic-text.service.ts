@@ -21,7 +21,7 @@ export class DynamicTextService {
   constructor() {
     setInterval(() => {
       this.updateText();
-    }, 20000); // Změna každých 20 sekund
+    }, 10000); // Změna každých 20 sekund
   }
 
   private updateText() {
