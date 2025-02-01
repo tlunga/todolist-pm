@@ -1,82 +1,88 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>To-Do List</ion-title>
-
+  <ion-toolbar color="primary">
+    <ion-title class="text-center">To-Do List</ion-title>
     <ion-buttons slot="end">
       <ion-img src="assets/todo-logo.png" class="header-img"></ion-img>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
+
   <!-- Vyhledávání -->
-  <ion-item>
-    <ion-input [(ngModel)]="searchQuery" placeholder="Hledat úkol..." (ionInput)="filterTasks()"></ion-input>
-  </ion-item>
+  <ion-card>
+    <ion-item>
+      <ion-input [(ngModel)]="searchQuery" placeholder="🔍 Hledat úkol..." (ionInput)="filterTasks()"></ion-input>
+    </ion-item>
+  </ion-card>
 
-  <!-- Filtrace podle měsíce -->
-  <ion-item>
-    <ion-label>Filtrovat podle měsíce:</ion-label>
-    <ion-select [(ngModel)]="selectedMonth" (ionChange)="filterTasks()">
-      <ion-select-option value="all">Všechny měsíce</ion-select-option>
-      <ion-select-option *ngFor="let month of availableMonths" [value]="month.value">
-        {{ month.label }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+  <!-- Filtrace a řazení -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Filtry</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Podle měsíce:</ion-label>
+        <ion-select [(ngModel)]="selectedMonth" (ionChange)="filterTasks()">
+          <ion-select-option value="all">Všechny</ion-select-option>
+          <ion-select-option *ngFor="let month of availableMonths" [value]="month.value">
+            {{ month.label }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
 
-  <!-- Filtrace podle priority -->
-  <ion-item>
-    <ion-label>Filtrovat podle priority:</ion-label>
-    <ion-select [(ngModel)]="selectedPriority" (ionChange)="filterTasks()">
-      <ion-select-option value="all">Všechny priority</ion-select-option>
-      <ion-select-option value="!">Nízká (!)</ion-select-option>
-      <ion-select-option value="!!">Střední (!!)</ion-select-option>
-      <ion-select-option value="!!!">Vysoká (!!!)</ion-select-option>
-    </ion-select>
-  </ion-item>
+      <ion-item>
+        <ion-label>Podle priority:</ion-label>
+        <ion-select [(ngModel)]="selectedPriority" (ionChange)="filterTasks()">
+          <ion-select-option value="all">Všechny</ion-select-option>
+          <ion-select-option value="!">Nízká (!)</ion-select-option>
+          <ion-select-option value="!!">Střední (!!)</ion-select-option>
+          <ion-select-option value="!!!">Vysoká (!!!)</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-  <!-- Filtrace podle kategorie -->
-  <ion-item>
-    <ion-label>Filtrovat podle kategorie:</ion-label>
-    <ion-select [(ngModel)]="selectedCategory" (ionChange)="filterTasks()">
-      <ion-select-option value="all">Všechny kategorie</ion-select-option>
-      <ion-select-option *ngFor="let category of categories" [value]="category">
-        {{ category }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+      <ion-item>
+        <ion-label>Podle kategorie:</ion-label>
+        <ion-select [(ngModel)]="selectedCategory" (ionChange)="filterTasks()">
+          <ion-select-option value="all">Všechny</ion-select-option>
+          <ion-select-option *ngFor="let category of categories" [value]="category">
+            {{ category }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
 
-  <!-- Řazení -->
-  <ion-item>
-    <ion-label>Řadit podle:</ion-label>
-    <ion-select [(ngModel)]="sortOrder" (ionChange)="sortTasks()">
-      <ion-select-option value="asc">Nejstarší první</ion-select-option>
-      <ion-select-option value="desc">Nejnovější první</ion-select-option>
-    </ion-select>
-  </ion-item>
+      <ion-item>
+        <ion-label>Řadit podle:</ion-label>
+        <ion-select [(ngModel)]="sortOrder" (ionChange)="sortTasks()">
+          <ion-select-option value="asc">Od nejstarších</ion-select-option>
+          <ion-select-option value="desc">Od nejnovějších</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-  <!-- Filtrovat pouze úkoly s deadlinem -->
-  <ion-item>
-    <ion-label>Zobrazit pouze úkoly s deadlinem:</ion-label>
-    <ion-toggle [(ngModel)]="showOnlyWithDeadline" (ionChange)="filterTasks()"></ion-toggle>
-  </ion-item>
+      <ion-item>
+        <ion-label>Úkoly s deadlinem:</ion-label>
+        <ion-toggle [(ngModel)]="showOnlyWithDeadline" (ionChange)="filterTasks()"></ion-toggle>
+      </ion-item>
 
-  <!-- Filtrovat oblíbené -->
-  <ion-item>
-    <ion-label>Zobrazit pouze oblíbené:</ion-label>
-    <ion-toggle [(ngModel)]="showFavoritesOnly" (ionChange)="filterTasks()"></ion-toggle>
-  </ion-item>
+      <ion-item>
+        <ion-label>Pouze oblíbené:</ion-label>
+        <ion-toggle [(ngModel)]="showFavoritesOnly" (ionChange)="filterTasks()"></ion-toggle>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 
   <!-- Seznam úkolů -->
   <ion-list>
     <ion-item-sliding *ngFor="let task of filteredTasks">
       <ion-item>
         <ion-label>
-          <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
+          <h2>{{ task.text }} <span [style.color]="task.priority === '!!!' ? 'red' : task.priority === '!!' ? 'orange' : 'green'">
+            {{ task.priority }}</span>
+          </h2>
           <p *ngIf="task.category">{{ task.category }}</p>
         </ion-label>
-        <!-- Hvězdička pro označení oblíbeného -->
+
         <ion-icon [name]="task.isFavorite ? 'star' : 'star-outline'" 
                   slot="end" 
                   color="warning"
@@ -88,12 +94,12 @@
                   (click)="toggleTaskDetails(task.id)">
         </ion-icon>
       </ion-item>
-  
+
       <!-- Detaily úkolu (zobrazí se pouze pokud je úkol rozbalen) -->
       <ion-item *ngIf="expandedTaskId === task.id">
         <ion-label>
           <p>{{ task.description }}</p>
-          <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
+          <p><strong>Datum vytvoření:</strong> {{ task.created | date:'medium' }}</p>
           <p *ngIf="task.dueDate"><strong>Deadline:</strong> {{ task.dueDate | date:'dd.MM.yyyy' }}</p>
         </ion-label>
       </ion-item>

@@ -1,98 +1,96 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Dokončené úkoly</ion-title>
-
+  <ion-toolbar color="primary">
+    <ion-title class="text-center">Dokončené úkoly</ion-title>
     <ion-buttons slot="end">
       <ion-img src="assets/todo-logo.png" class="header-img"></ion-img>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-item>
-    <ion-input [(ngModel)]="searchQuery" placeholder="Hledat úkol..." (ionInput)="filterCompletedTasks()"></ion-input>
-  </ion-item>  
-  
-  <!-- Filtrace podle měsíce dokončení -->
-  <ion-item>
-    <ion-label>Filtrovat podle měsíce dokončení:</ion-label>
-    <ion-select [(ngModel)]="selectedMonth" (ionChange)="filterCompletedTasks()">
-      <ion-select-option value="all">Všechny měsíce</ion-select-option>
-      <ion-select-option *ngFor="let month of availableMonths" [value]="month.value">
-        {{ month.label }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+<ion-content class="ion-padding">
 
-  <!-- Filtrace podle priority -->
-  <ion-item>
-    <ion-label>Filtrovat podle priority:</ion-label>
-    <ion-select [(ngModel)]="selectedPriority" (ionChange)="filterCompletedTasks()">
-      <ion-select-option value="all">Všechny priority</ion-select-option>
-      <ion-select-option value="!">Nízká (!)</ion-select-option>
-      <ion-select-option value="!!">Střední (!!)</ion-select-option>
-      <ion-select-option value="!!!">Vysoká (!!!)</ion-select-option>
-    </ion-select>
-  </ion-item>
+  <ion-card>
+    <ion-item>
+      <ion-input [(ngModel)]="searchQuery" placeholder="🔍 Hledat úkol..." (ionInput)="filterCompletedTasks()"></ion-input>
+    </ion-item>  
+  </ion-card>
 
-  <!-- Filtrace podle kategorie -->
-  <ion-item>
-    <ion-label>Filtrovat podle kategorie:</ion-label>
-    <ion-select [(ngModel)]="selectedCategory" (ionChange)="filterCompletedTasks()">
-      <ion-select-option value="all">Všechny kategorie</ion-select-option>
-      <ion-select-option *ngFor="let category of categories" [value]="category">
-        {{ category }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Filtry</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label>Podle měsíce:</ion-label>
+        <ion-select [(ngModel)]="selectedMonth" (ionChange)="filterCompletedTasks()">
+          <ion-select-option value="all">Všechny</ion-select-option>
+          <ion-select-option *ngFor="let month of availableMonths" [value]="month.value">
+            {{ month.label }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
 
-  <!-- Řazení podle data dokončení -->
-  <ion-item>
-    <ion-label>Řadit podle:</ion-label>
-    <ion-select [(ngModel)]="sortOrder" (ionChange)="sortCompletedTasks()">
-      <ion-select-option value="asc">Nejdříve dokončené</ion-select-option>
-      <ion-select-option value="desc">Nejnověji dokončené</ion-select-option>
-    </ion-select>
-  </ion-item>
+      <ion-item>
+        <ion-label>Podle priority:</ion-label>
+        <ion-select [(ngModel)]="selectedPriority" (ionChange)="filterCompletedTasks()">
+          <ion-select-option value="all">Všechny</ion-select-option>
+          <ion-select-option value="!">Nízká (!)</ion-select-option>
+          <ion-select-option value="!!">Střední (!!)</ion-select-option>
+          <ion-select-option value="!!!">Vysoká (!!!)</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-  <!-- Filtrovat pouze úkoly s deadlinem -->
-  <ion-item>
-    <ion-label>Zobrazit pouze úkoly s deadlinem:</ion-label>
-    <ion-toggle [(ngModel)]="showOnlyWithDeadline" (ionChange)="filterCompletedTasks()"></ion-toggle>
-  </ion-item>
+      <ion-item>
+        <ion-label>Podle kategorie:</ion-label>
+        <ion-select [(ngModel)]="selectedCategory" (ionChange)="filterCompletedTasks()">
+          <ion-select-option value="all">Všechny</ion-select-option>
+          <ion-select-option *ngFor="let category of categories" [value]="category">
+            {{ category }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
 
-  <!-- Seznam dokončených úkolů -->
+      <ion-item>
+        <ion-label>Řadit podle:</ion-label>
+        <ion-select [(ngModel)]="sortOrder" (ionChange)="sortCompletedTasks()">
+          <ion-select-option value="asc">Nejdříve dokončené</ion-select-option>
+          <ion-select-option value="desc">Nejnověji dokončené</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
   <ion-list>
     <ion-item-sliding *ngFor="let task of filteredCompletedTasks">
       <ion-item>
         <ion-label>
-          <h2>{{ task.text }} <span style="color: red;">{{ task.priority }}</span></h2>
+          <h2>{{ task.text }} <span [style.color]="task.priority === '!!!' ? 'red' : task.priority === '!!' ? 'orange' : 'green'">
+            {{ task.priority }}</span>
+          </h2>
           <p *ngIf="task.category">{{ task.category }}</p>
         </ion-label>
+
         <ion-icon [name]="expandedTaskId === task.id ? 'chevron-up-outline' : 'chevron-down-outline'"
                   slot="end"
                   (click)="toggleTaskDetails(task.id)">
         </ion-icon>
       </ion-item>
-  
-      <!-- Detaily úkolu (zobrazí se pouze pokud je úkol rozbalen) -->
+
       <ion-item *ngIf="expandedTaskId === task.id">
         <ion-label>
           <p>{{ task.description }}</p>
-          <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
-          <p><strong>Date Completed:</strong> {{ task.completedAt | date:'medium' }}</p>
+          <p><strong>Datum vytvoření:</strong> {{ task.created | date:'medium' }}</p>
+          <p><strong>Datum dokončení:</strong> {{ task.completedAt | date:'medium' }}</p>
           <p *ngIf="task.dueDate"><strong>Termín:</strong> {{ task.dueDate | date:'dd.MM.yyyy' }}</p>
         </ion-label>
       </ion-item>
 
-      <!-- Swipe doprava: Obnovit úkol -->
       <ion-item-options side="start">
         <ion-item-option color="warning" (click)="undoTask(task.id)">
           <ion-icon name="arrow-undo-outline"></ion-icon> Obnovit
         </ion-item-option>
       </ion-item-options>
 
-      <!-- Swipe doleva: Smazat -->
       <ion-item-options side="end">
         <ion-item-option color="danger" (click)="deleteCompletedTask(task.id)">
           <ion-icon name="trash-outline"></ion-icon> Smazat

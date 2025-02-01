@@ -7,13 +7,20 @@
     background: none;   /* Žádné pozadí */
   }
   
-
-  .header-img {
-    width: 40px;
-    height: 40px;
-  }
   .dynamic-text {
     text-align: center;
     margin-top: 10px;
     font-weight: bold;
+  }
+
+
+  .text-center {
+    text-align: center;
+  }
+  .text-lg {
+    font-size: 1.2rem;
+  }
+  .header-img {
+    width: 40px;
+    height: 40px;
   }
