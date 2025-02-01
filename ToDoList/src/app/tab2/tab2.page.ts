@@ -11,6 +11,7 @@ export class Tab2Page {
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
   showFavoritesOnly: boolean = false;
+  showOnlyWithDeadline: boolean = false; // Přidána možnost filtrovat jen úkoly s deadlinem
   expandedTaskId: string | null = null;
 
   sortOrder: string = 'asc';
@@ -76,8 +77,9 @@ export class Tab2Page {
       const categoryMatch = this.selectedCategory === 'all' || task.category === this.selectedCategory;
       const searchMatch = this.searchQuery.trim() === '' || task.text.toLowerCase().includes(this.searchQuery.toLowerCase());
       const favoriteMatch = !this.showFavoritesOnly || task.isFavorite;
+      const deadlineMatch = !this.showOnlyWithDeadline || !!task.dueDate; // Pouze úkoly s deadlinem
       
-      return monthMatch && priorityMatch && categoryMatch && searchMatch && favoriteMatch;
+      return monthMatch && priorityMatch && categoryMatch && searchMatch && favoriteMatch && deadlineMatch;
     });
 
     this.filteredTasks.sort((a, b) => {

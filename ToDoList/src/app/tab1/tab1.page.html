@@ -23,6 +23,12 @@
         <ion-select-option value="!!!">Vysoká ( !!! )</ion-select-option>
       </ion-select>
     </ion-item>
+
+    <ion-item>
+      <ion-label>Deadline:</ion-label>
+      <ion-datetime [(ngModel)]="taskDueDate" display-format="DD.MM.YYYY"></ion-datetime>
+    </ion-item>
+
     <ion-item>
       <ion-label>Kategorie</ion-label>
       <ion-select [(ngModel)]="selectedCategory">

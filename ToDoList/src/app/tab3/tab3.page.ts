@@ -10,6 +10,7 @@ import { TaskService, Task } from '../task.service';
 export class Tab3Page {
   completedTasks: Task[] = [];
   filteredCompletedTasks: Task[] = [];
+  showOnlyWithDeadline: boolean = false; // Přidána možnost filtrovat jen úkoly s deadlinem
   expandedTaskId: string | null = null; 
 
   sortOrder: string = 'asc';
@@ -72,8 +73,9 @@ export class Tab3Page {
       const priorityMatch = this.selectedPriority === 'all' || task.priority === this.selectedPriority;
       const categoryMatch = this.selectedCategory === 'all' || task.category === this.selectedCategory;
       const searchMatch = this.searchQuery.trim() === '' || task.text.toLowerCase().includes(this.searchQuery.toLowerCase());
+      const deadlineMatch = !this.showOnlyWithDeadline || !!task.dueDate; // Pouze úkoly s deadlinem
 
-      return monthMatch && priorityMatch && categoryMatch && searchMatch;
+      return monthMatch && priorityMatch && categoryMatch && searchMatch && deadlineMatch;
     });
 
     this.sortCompletedTasks();

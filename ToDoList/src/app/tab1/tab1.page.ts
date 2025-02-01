@@ -13,6 +13,7 @@ export class Tab1Page implements OnInit, OnDestroy {
   taskText: string = '';
   taskDescription: string = '';
   taskPriority: string = '!';
+  taskDueDate?: string;
   selectedCategory: string = ''; // Vybraná kategorie
   newCategory: string = ''; // Nová kategorie
   categoryToDelete: string = ''; // Kategorie k odstranění
@@ -42,11 +43,12 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   addTask() {
     if (this.taskText.trim()) {
-      this.taskService.addTask(this.taskText.trim(), this.taskDescription.trim(), this.taskPriority, this.selectedCategory);
+      this.taskService.addTask(this.taskText.trim(), this.taskDescription.trim(), this.taskPriority, this.selectedCategory, this.taskDueDate);
       this.taskText = '';
       this.taskDescription = '';
       this.taskPriority = '!';
       this.selectedCategory = '';
+      this.taskDueDate = undefined;
     }
   }
 

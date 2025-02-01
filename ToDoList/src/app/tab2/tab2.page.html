@@ -56,6 +56,12 @@
     </ion-select>
   </ion-item>
 
+  <!-- Filtrovat pouze úkoly s deadlinem -->
+  <ion-item>
+    <ion-label>Zobrazit pouze úkoly s deadlinem:</ion-label>
+    <ion-toggle [(ngModel)]="showOnlyWithDeadline" (ionChange)="filterTasks()"></ion-toggle>
+  </ion-item>
+
   <!-- Filtrovat oblíbené -->
   <ion-item>
     <ion-label>Zobrazit pouze oblíbené:</ion-label>
@@ -88,6 +94,7 @@
         <ion-label>
           <p>{{ task.description }}</p>
           <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
+          <p *ngIf="task.dueDate"><strong>Deadline:</strong> {{ task.dueDate | date:'dd.MM.yyyy' }}</p>
         </ion-label>
       </ion-item>
 

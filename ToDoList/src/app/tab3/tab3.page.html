@@ -55,6 +55,12 @@
     </ion-select>
   </ion-item>
 
+  <!-- Filtrovat pouze úkoly s deadlinem -->
+  <ion-item>
+    <ion-label>Zobrazit pouze úkoly s deadlinem:</ion-label>
+    <ion-toggle [(ngModel)]="showOnlyWithDeadline" (ionChange)="filterCompletedTasks()"></ion-toggle>
+  </ion-item>
+
   <!-- Seznam dokončených úkolů -->
   <ion-list>
     <ion-item-sliding *ngFor="let task of filteredCompletedTasks">
@@ -75,6 +81,7 @@
           <p>{{ task.description }}</p>
           <p><strong>Date Created:</strong> {{ task.created | date:'medium' }}</p>
           <p><strong>Date Completed:</strong> {{ task.completedAt | date:'medium' }}</p>
+          <p *ngIf="task.dueDate"><strong>Termín:</strong> {{ task.dueDate | date:'dd.MM.yyyy' }}</p>
         </ion-label>
       </ion-item>
 

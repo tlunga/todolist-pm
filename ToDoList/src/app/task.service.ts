@@ -7,6 +7,7 @@ export interface Task {
   priority: string;
   category?: string;
   created: string;
+  dueDate?: string;
   completedAt?: string;
   isFavorite?: boolean;
 }
@@ -37,14 +38,15 @@ export class TaskService {
     localStorage.setItem('categories', JSON.stringify(this.categories));
   }
 
-  addTask(taskText: string, taskDescription: string, taskPriority: string, category?: string) {
+  addTask(taskText: string, taskDescription: string, taskPriority: string, category?: string, dueDate?: string) {
     const newTask: Task = {
       id: crypto.randomUUID(),
       text: taskText,
       description: taskDescription || '',
       priority: taskPriority || '!',
       category: category || '',
-      created: this.generateRandomDate().toISOString()
+      created: this.generateRandomDate().toISOString(),
+      dueDate: dueDate ? new Date(dueDate).toISOString().split('T')[0] : undefined // Uložíme pouze datum bez času
     };
     this.tasks.push(newTask);
     this.saveTasks();
