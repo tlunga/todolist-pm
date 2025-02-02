@@ -76,12 +76,20 @@
         </ion-icon>
       </ion-item>
 
+      <!-- Detaily úkolu (zobrazí se pouze pokud je úkol rozbalen) -->
       <ion-item *ngIf="expandedTaskId === task.id">
         <ion-label>
           <p>{{ task.description }}</p>
           <p><strong>Datum vytvoření:</strong> {{ task.created | date:'medium' }}</p>
           <p><strong>Datum dokončení:</strong> {{ task.completedAt | date:'medium' }}</p>
-          <p *ngIf="task.dueDate"><strong>Termín:</strong> {{ task.dueDate | date:'dd.MM.yyyy' }}</p>
+          <p *ngIf="task.dueDate"><strong>Deadline:</strong> {{ task.dueDate | date:'dd.MM.yyyy' }}</p>
+        </ion-label>
+      </ion-item>
+
+      <!-- Zobrazení obrázku ve větší velikosti, pokud existuje -->
+      <ion-item *ngIf="expandedTaskId === task.id && task.image">
+        <ion-label>
+          <img [src]="task.image" class="task-image" />
         </ion-label>
       </ion-item>
 

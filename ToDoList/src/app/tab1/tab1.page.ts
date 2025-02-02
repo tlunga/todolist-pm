@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TaskService } from '../task.service';
 import { DynamicTextService } from '../dynamic-text/dynamic-text.service';
 import { Subscription } from 'rxjs';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+
 
 @Component({
   selector: 'app-tab1',
@@ -19,6 +21,7 @@ export class Tab1Page implements OnInit, OnDestroy {
   categoryToDelete: string = ''; // Kategorie k odstranění
   categories: string[] = []; // Seznam kategorií
   dynamicText: string = ''; 
+  taskImage?: string; // Přidaná proměnná pro obrázek
   private textSubscription!: Subscription;
 
   showDeadlinePicker: boolean = false; // Stav pro zobrazení kalendáře
@@ -47,15 +50,33 @@ export class Tab1Page implements OnInit, OnDestroy {
     this.showDeadlinePicker = !this.showDeadlinePicker;
   }
 
+  async takePhoto() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Base64, // Base64 formát pro snadné uložení
+        source: CameraSource.Camera
+      });
+
+      if (image.base64String) {
+        this.taskImage = `data:image/jpeg;base64,${image.base64String}`;
+      }
+    } catch (error) {
+      console.error("Chyba při pořizování fotografie:", error);
+    }
+  }
+
   addTask() {
     if (this.taskText.trim()) {
-      this.taskService.addTask(this.taskText.trim(), this.taskDescription.trim(), this.taskPriority, this.selectedCategory, this.taskDueDate);
+      this.taskService.addTask(this.taskText.trim(), this.taskDescription.trim(), this.taskPriority, this.selectedCategory, this.taskDueDate, this.taskImage);
       this.taskText = '';
       this.taskDescription = '';
       this.taskPriority = '!';
       this.selectedCategory = '';
       this.taskDueDate = undefined;
       this.showDeadlinePicker = false;
+      this.taskImage = undefined;
     }
   }
 

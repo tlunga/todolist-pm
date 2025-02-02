@@ -104,6 +104,14 @@
         </ion-label>
       </ion-item>
 
+      <!-- Zobrazení obrázku ve větší velikosti, pokud existuje -->
+      <ion-item *ngIf="expandedTaskId === task.id && task.image">
+        <ion-label>
+          <img [src]="task.image" class="task-image" />
+        </ion-label>
+      </ion-item>
+
+
       <!-- Swipe doprava: Označit jako hotové -->
       <ion-item-options side="start">
         <ion-item-option color="success" (click)="completeTask(task.id)">
