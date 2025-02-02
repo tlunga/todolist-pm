@@ -16,12 +16,12 @@ export class DynamicTextService {
   private textIndex = 0;
   private textSubject = new BehaviorSubject<string>(this.textMessages[0]);
 
-  text$ = this.textSubject.asObservable(); // Veřejný Observable pro odběr v komponentě
+  text$ = this.textSubject.asObservable();
 
   constructor() {
     setInterval(() => {
       this.updateText();
-    }, 10000); // Změna každých 20 sekund
+    }, 10000);
   }
 
   private updateText() {

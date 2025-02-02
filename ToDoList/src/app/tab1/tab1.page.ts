@@ -16,15 +16,15 @@ export class Tab1Page implements OnInit, OnDestroy {
   taskDescription: string = '';
   taskPriority: string = '!';
   taskDueDate?: string;
-  selectedCategory: string = ''; // Vybraná kategorie
-  newCategory: string = ''; // Nová kategorie
-  categoryToDelete: string = ''; // Kategorie k odstranění
-  categories: string[] = []; // Seznam kategorií
+  selectedCategory: string = '';
+  newCategory: string = '';
+  categoryToDelete: string = '';
+  categories: string[] = [];
   dynamicText: string = ''; 
-  taskImage?: string; // Přidaná proměnná pro obrázek
+  taskImage?: string;
   private textSubscription!: Subscription;
 
-  showDeadlinePicker: boolean = false; // Stav pro zobrazení kalendáře
+  showDeadlinePicker: boolean = false;
 
   constructor(
     private taskService: TaskService,
@@ -55,7 +55,7 @@ export class Tab1Page implements OnInit, OnDestroy {
       const image = await Camera.getPhoto({
         quality: 90,
         allowEditing: false,
-        resultType: CameraResultType.Base64, // Base64 formát pro snadné uložení
+        resultType: CameraResultType.Base64,
         source: CameraSource.Camera
       });
 

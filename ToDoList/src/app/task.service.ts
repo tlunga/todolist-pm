@@ -47,8 +47,8 @@ export class TaskService {
       priority: taskPriority || '!',
       category: category || '',
       created: this.generateRandomDate().toISOString(),
-      dueDate: dueDate ? new Date(dueDate).toISOString().split('T')[0] : undefined, // Uložíme pouze datum bez času
-      image: image || undefined // Uložení obrázku, pokud byl pořízen
+      dueDate: dueDate ? new Date(dueDate).toISOString().split('T')[0] : undefined,
+      image: image || undefined
     };
     this.tasks.push(newTask);
     this.saveTasks();
@@ -128,7 +128,6 @@ export class TaskService {
     const oneYearAgo = new Date();
     oneYearAgo.setFullYear(now.getFullYear() - 1);
     
-    // Náhodné číslo mezi datem před rokem a dnešním dnem
     const randomTime = oneYearAgo.getTime() + Math.random() * (now.getTime() - oneYearAgo.getTime());
     return new Date(randomTime);
   }

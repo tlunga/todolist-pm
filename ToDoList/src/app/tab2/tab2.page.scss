@@ -7,13 +7,13 @@
   }
 
   .task-image {
-    width: 100%; // Obrázek bude mít plnou šířku kontejneru
-    max-width: 300px; // Maximální šířka
-    height: auto; // Zachování poměru stran
+    width: 100%;
+    max-width: 300px;
+    height: auto;
     display: block;
-    margin: 10px auto; // Zarovnání na střed
-    border-radius: 10px; // Zaoblení rohů
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); // Jemný stín
+    margin: 10px auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
   }
   
   

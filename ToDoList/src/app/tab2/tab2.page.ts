@@ -11,17 +11,17 @@ export class Tab2Page {
   tasks: Task[] = [];
   filteredTasks: Task[] = [];
   showFavoritesOnly: boolean = false;
-  showOnlyWithDeadline: boolean = false; // Přidána možnost filtrovat jen úkoly s deadlinem
+  showOnlyWithDeadline: boolean = false;
   expandedTaskId: string | null = null;
 
   sortOrder: string = 'asc';
   selectedMonth: string = 'all';
   selectedPriority: string = 'all';
-  selectedCategory: string = 'all'; // Přidána filtrace podle kategorie
+  selectedCategory: string = 'all';
   searchQuery: string = '';
 
   availableMonths: { value: string, label: string }[] = [];
-  categories: string[] = []; // Seznam dostupných kategorií
+  categories: string[] = [];
 
   constructor(private taskService: TaskService) {}
 
@@ -77,7 +77,7 @@ export class Tab2Page {
       const categoryMatch = this.selectedCategory === 'all' || task.category === this.selectedCategory;
       const searchMatch = this.searchQuery.trim() === '' || task.text.toLowerCase().includes(this.searchQuery.toLowerCase());
       const favoriteMatch = !this.showFavoritesOnly || task.isFavorite;
-      const deadlineMatch = !this.showOnlyWithDeadline || !!task.dueDate; // Pouze úkoly s deadlinem
+      const deadlineMatch = !this.showOnlyWithDeadline || !!task.dueDate;
       
       return monthMatch && priorityMatch && categoryMatch && searchMatch && favoriteMatch && deadlineMatch;
     });

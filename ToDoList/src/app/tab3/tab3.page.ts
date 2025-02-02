@@ -10,23 +10,23 @@ import { TaskService, Task } from '../task.service';
 export class Tab3Page {
   completedTasks: Task[] = [];
   filteredCompletedTasks: Task[] = [];
-  showOnlyWithDeadline: boolean = false; // Přidána možnost filtrovat jen úkoly s deadlinem
+  showOnlyWithDeadline: boolean = false;
   expandedTaskId: string | null = null; 
 
   sortOrder: string = 'asc';
   selectedMonth: string = 'all';
   selectedPriority: string = 'all';
-  selectedCategory: string = 'all'; // Přidáváme filtr kategorií
+  selectedCategory: string = 'all';
   searchQuery: string = '';
 
   availableMonths: { value: string, label: string }[] = [];
-  categories: string[] = []; // Seznam dostupných kategorií
+  categories: string[] = [];
 
   constructor(private taskService: TaskService) {}
 
   ionViewWillEnter() {
     this.completedTasks = this.taskService.getCompletedTasks();
-    this.categories = this.taskService.getCategories(); // Načítáme dostupné kategorie
+    this.categories = this.taskService.getCategories();
     this.updateAvailableMonths();
     this.filterCompletedTasks();
   }
@@ -73,7 +73,7 @@ export class Tab3Page {
       const priorityMatch = this.selectedPriority === 'all' || task.priority === this.selectedPriority;
       const categoryMatch = this.selectedCategory === 'all' || task.category === this.selectedCategory;
       const searchMatch = this.searchQuery.trim() === '' || task.text.toLowerCase().includes(this.searchQuery.toLowerCase());
-      const deadlineMatch = !this.showOnlyWithDeadline || !!task.dueDate; // Pouze úkoly s deadlinem
+      const deadlineMatch = !this.showOnlyWithDeadline || !!task.dueDate;
 
       return monthMatch && priorityMatch && categoryMatch && searchMatch && deadlineMatch;
     });
